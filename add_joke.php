@@ -8,7 +8,8 @@ ini_set('display_errors', 1);
 
 session_start();
 
-if(!$_SESSION['username'])
+
+if(!$_SESSION['userid'])
 {
 	echo "Only logged in user can access this page. Click <a href = 'login_form.php'> here </a> to login <br>";
 	exit;
@@ -24,16 +25,24 @@ $new_joke_question = addslashes($new_joke_question);
 $new_joke_answer = addslashes($new_joke_answer);
 $userid = $_SESSION['userid'];
 
-echo $new_joke_answer . "and" . $new_joke_question;
+echo "<h2> Trying to add a new joke ". $new_joke_question . " and ". $new_joke_answer."</h2>";
+$stmt = $mysqli->prepare("INSERT INTO jokes_table (JokeID, Joke_question, Joke_answer, users_id1) VALUES (NULL, ?, ?, ?)");
+$stmt->bind_param("ssi", $new_joke_question, $new_joke_answer,$userid);
 
+echo"<pre>";
+print_r($stmt);
+echo"</pre>";
 
-// echo"<h2>Show all jokes with the word $keywordfromform</h2>";
-$sql = "INSERT INTO jokes_table (JokeID, Joke_question, Joke_answer, users_id1) VALUES (NULL, '$new_joke_question', '$new_joke_answer', '$userid')"; 
-$result = $mysqli->query($sql);
+$result = $stmt->execute();
+echo"<pre>";
+print_r($result);
+echo"</pre>";
+
+$stmt->close();
 
 include "search_all_jokes.php";
 
+echo"<a href = 'index.php'>Return to main</a>";
 
 ?>
 
-<a href = 'index.php'>  Return to main </a>

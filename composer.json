@@ -1,2 +1,8 @@
 {
+  "require-dev": {
+    "phpunit/phpunit": "5.0.*"
+  },
+  "require": {
+    "google/apiclient": "^2.8"
+  }
 }
